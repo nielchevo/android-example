@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.tokopedia.testproject.R;
@@ -23,10 +25,14 @@ public class NewsActivity extends AppCompatActivity implements com.tokopedia.tes
         setContentView(R.layout.activity_news);
         newsPresenter = new NewsPresenter(this);
         newsAdapter = new NewsAdapter(null);
+
+        // init view
+        LinearLayout mainView = findViewById(R.id.main_view);
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
         recyclerView.setAdapter(newsAdapter);
-        newsPresenter.getEverything("android");
+
+        newsPresenter.getEverything("android"); // this for load data
     }
 
     @Override
@@ -38,6 +44,11 @@ public class NewsActivity extends AppCompatActivity implements com.tokopedia.tes
     @Override
     public void onErrorGetNews(Throwable throwable) {
         Toast.makeText(this, throwable.getMessage(), Toast.LENGTH_LONG).show();
+
+    }
+
+    public void onLoadMore() {
+
     }
 
     @Override

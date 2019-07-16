@@ -1,8 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.tokopedia.testproject.problems.news.view.VerticalRecyclerView
-    android:id="@+id/recyclerView"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_view"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="16dp"
-    android:clipToPadding="false"/>
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
+
+    <com.tokopedia.testproject.problems.news.view.VerticalRecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:padding="16dp"></com.tokopedia.testproject.problems.news.view.VerticalRecyclerView>
+
+    <!-- Loading state -->
+    <RelativeLayout
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        tools:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
+    <!-- retry page -->
+    <RelativeLayout
+        android:id="@+id/retryPanel"
+        android:layout_width="match_parent "
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:width="50dp" />
+    </RelativeLayout>
+</LinearLayout>
+
