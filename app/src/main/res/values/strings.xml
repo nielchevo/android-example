@@ -41,5 +41,6 @@ You also need to handle issues that happen when rotating the device, including t
     <string name="target">target</string>
     <string name="jug_2">Jug 2</string>
     <string name="simulate">Simulate!</string>
+    <string name="retry">Retry</string>
 
 </resources>

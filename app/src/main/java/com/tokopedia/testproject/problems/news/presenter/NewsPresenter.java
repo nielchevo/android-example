@@ -21,10 +21,14 @@ public class NewsPresenter {
 
     private View view;
 
+    private String tempKeyword = "";
+
     public interface View {
         void onSuccessGetNews(List<Article> articleList);
 
         void onErrorGetNews(Throwable throwable);
+
+        void onCompletedGetNews();
     }
 
     public NewsPresenter(NewsPresenter.View view) {
@@ -32,6 +36,10 @@ public class NewsPresenter {
     }
 
     public void getEverything(String keyword) {
+
+        //temp save keyword for retry
+        tempKeyword = keyword;
+
         NewsDataSource.getService().getEverything(keyword)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -53,9 +61,14 @@ public class NewsPresenter {
 
                     @Override
                     public void onComplete() {
-
+                        view.onCompletedGetNews();
                     }
                 });
+    }
+
+    public void doRetryFetchNews() {
+
+        getEverything(tempKeyword);
     }
 
     public void unsubscribe() {
