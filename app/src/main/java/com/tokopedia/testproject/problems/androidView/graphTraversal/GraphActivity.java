@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -13,10 +14,13 @@ import android.widget.Toast;
 
 import com.tokopedia.testproject.R;
 
+import java.util.List;
+
 import de.blox.graphview.BaseGraphAdapter;
 import de.blox.graphview.Graph;
 import de.blox.graphview.GraphView;
 import de.blox.graphview.Node;
+import de.blox.graphview.Vector;
 import de.blox.graphview.energy.FruchtermanReingoldAlgorithm;
 
 public class GraphActivity extends AppCompatActivity {
@@ -75,10 +79,50 @@ public class GraphActivity extends AppCompatActivity {
          */
 
         traverseAndColorTheGraph(graph, graph.getNode(0), 2);
+
     }
 
     private void traverseAndColorTheGraph(Graph graph, Node rootNode, int target) {
 
+        if(graph.hasSuccessor(rootNode) == false)
+            return;
+
+        traverseDFS(graph, rootNode, 0);
+
+        for(int i=0; i < graph.getNodes().size(); i++)
+        {
+            Log.d("GRAPH :", "GetNode Data "+ graph.getNode(i).getData() +"Get Position(x) only: " + graph.getNode(i).getPosition().getX());
+        }
+    }
+
+    private void traverseDFS(Graph graph, Node curNode, int pos){
+
+        if(curNode.getPosition() != null){
+            return;
+        }
+
+        //graph.getNode(pos).setIsVisited(true);
+
+        //track for coloring
+        Vector test = new Vector(pos, pos+1);
+        graph.getNode(curNode.getData()).setPos(test);
+
+        pos++;
+
+        if(graph.hasSuccessor(curNode) == true)
+        {
+            int sizeOfNextNode = graph.successorsOf(curNode).size();
+            List<Node> nextNodes = graph.successorsOf(curNode);
+
+            for(int i=0; i < sizeOfNextNode; i++)
+            {
+                Object nextNodeData = nextNodes.get(i).getData();
+                traverseDFS(graph, graph.getNode(nextNodeData), pos);
+            }
+        }
+        else {
+            return;
+        }
     }
 
     @Override

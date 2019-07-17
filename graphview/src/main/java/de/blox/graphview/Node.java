@@ -9,6 +9,9 @@ public class Node {
     public Object data;
     private Size size;
 
+    //tracking DFS
+    private static boolean visited = false;
+
     public Node(Object data) {
         this.data = data;
     }
@@ -44,6 +47,11 @@ public class Node {
     public int getHeight() {
         return size.getHeight();
     }
+
+    // Tracking DFS
+    public boolean getIsVisited() { return this.visited; }
+
+    public void setIsVisited(boolean mVisited) { this.visited = mVisited; }
 
     @Override
     public String toString() {
