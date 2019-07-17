@@ -1,5 +1,7 @@
 package com.tokopedia.testproject.problems.androidView.graphTraversal;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -27,7 +29,7 @@ public class GraphActivity extends AppCompatActivity {
     private int nodeCount = 1;
     private Node currentNode;
     protected BaseGraphAdapter<ViewHolder> adapter;
-
+    private int mTarget = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,12 +46,23 @@ public class GraphActivity extends AppCompatActivity {
             @NonNull
             @Override
             public ViewHolder onCreateViewHolder(View view) {
+
                 return new ViewHolder(view);
             }
 
             @Override
             public void onBindViewHolder(ViewHolder viewHolder, Object data, int position) {
                 viewHolder.textView.setText(data.toString());
+
+                int x = getGraph().getNode(data).getDistance();
+                // Color handle for each node
+                if( x == 0){
+                    viewHolder.cardView.setCardBackgroundColor(Color.parseColor("#ffaa66cc")); //hue
+                } else if( x < mTarget) {
+                    viewHolder.cardView.setCardBackgroundColor(Color.parseColor("#ff99cc00")); //green
+                } else {
+                    viewHolder.cardView.setCardBackgroundColor(Color.parseColor("#ffff8800")); //orange
+                }
             }
         };
 
@@ -79,10 +92,10 @@ public class GraphActivity extends AppCompatActivity {
          */
 
         traverseAndColorTheGraph(graph, graph.getNode(0), 2);
-
     }
 
     private void traverseAndColorTheGraph(Graph graph, Node rootNode, int target) {
+        mTarget = target; // track
 
         if(graph.hasSuccessor(rootNode) == false)
             return;
@@ -91,21 +104,21 @@ public class GraphActivity extends AppCompatActivity {
 
         for(int i=0; i < graph.getNodes().size(); i++)
         {
-            Log.d("GRAPH :", "GetNode Data "+ graph.getNode(i).getData() +"Get Position(x) only: " + graph.getNode(i).getPosition().getX());
+            Log.d("GRAPH :", "GetNode Data: "+ graph.getNode(i).getData() +" Get distance: " + graph.getNode(i).getDistance());
         }
     }
 
     private void traverseDFS(Graph graph, Node curNode, int pos){
 
-        if(curNode.getPosition() != null){
+        //if(curNode.getPosition() != null){
+        if(curNode.getVisited() == true){
             return;
         }
 
-        //graph.getNode(pos).setIsVisited(true);
-
-        //track for coloring
-        Vector test = new Vector(pos, pos+1);
-        graph.getNode(curNode.getData()).setPos(test);
+        // Vector test = new Vector(pos, pos+1);
+        // track is visited and distance
+        graph.getNode(curNode.getData()).setDistance(pos);
+        graph.getNode(curNode.getData()).setVisited(true);
 
         pos++;
 
@@ -114,6 +127,7 @@ public class GraphActivity extends AppCompatActivity {
             int sizeOfNextNode = graph.successorsOf(curNode).size();
             List<Node> nextNodes = graph.successorsOf(curNode);
 
+            // traverse edges
             for(int i=0; i < sizeOfNextNode; i++)
             {
                 Object nextNodeData = nextNodes.get(i).getData();

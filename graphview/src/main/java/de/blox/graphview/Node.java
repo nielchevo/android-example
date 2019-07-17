@@ -10,7 +10,8 @@ public class Node {
     private Size size;
 
     //tracking DFS
-    private static boolean visited = false;
+    private int distance;
+    private boolean visited = false;
 
     public Node(Object data) {
         this.data = data;
@@ -49,9 +50,11 @@ public class Node {
     }
 
     // Tracking DFS
-    public boolean getIsVisited() { return this.visited; }
+    public int getDistance() { return this.distance; }
+    public void setDistance(int x) { this.distance = x; }
 
-    public void setIsVisited(boolean mVisited) { this.visited = mVisited; }
+    public boolean getVisited() { return this.visited; }
+    public void setVisited(boolean x) { this.visited = x; }
 
     @Override
     public String toString() {
