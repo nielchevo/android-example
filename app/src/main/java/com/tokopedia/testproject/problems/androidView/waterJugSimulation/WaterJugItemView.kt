@@ -19,5 +19,9 @@ class WaterJugItemView(context: Context) : FrameLayout(context) {
         water_jug1.setWaterFill(jug1)
         water_jug2.setMaxWater(jug2Max)
         water_jug2.setWaterFill(jug2)
+
+        // render each jug view
+        water_jug1.drawCurrentStatus();
+        water_jug2.drawCurrentStatus();
     }
 }

@@ -2,9 +2,11 @@ package com.tokopedia.testproject.problems.androidView.waterJugSimulation;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 
@@ -92,4 +94,36 @@ public class WaterJugView extends View {
     `--------'
     */
 
+    //draw WaterJug view
+    public void drawCurrentStatus() {
+        // get this jug view; TODO: CHANGE TO PICTURE
+        /*
+        hardcoded by color code
+        FULL -> BLACK;
+        HALF FULL -> BLUE
+        HALF EMPTY -> RED;
+        EMPTY -> WHITE
+        */
+
+        int jugContent = maxWater - waterFill;
+
+        if(jugContent == 0) {
+            // is empty
+
+            this.setBackgroundColor(Color.parseColor("#000000"));
+        }
+        else if(jugContent == maxWater) {
+            // is full
+            this.setBackgroundColor(Color.parseColor("#ffffff")); //black
+        }
+        else {
+            // half
+            if(jugContent >= (maxWater/2)) {
+                //half FULL!
+                this.setBackgroundColor(Color.parseColor("#0000ff")); // blue
+            } else {
+                this.setBackgroundColor(Color.parseColor("#ff0000")); // red
+            }
+        }
+    }
 }
