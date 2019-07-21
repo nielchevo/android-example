@@ -17,6 +17,8 @@ public class Solution {
     public static void sliceTo4x4(Context context, onSuccessLoadBitmap onSuccessLoadBitmap, String imageUrl) {
         ArrayList<Bitmap> bitmapList = new ArrayList<>();
         // TODO, download the image, crop, then sliced to 15 Bitmap (4x4 Bitmap). ignore the last Bitmap
+
+
         // below is stub, replace with your implementation!
         bitmapList.add(UtilKt.toBitmap(context, R.drawable.sample11));
         bitmapList.add(UtilKt.toBitmap(context, R.drawable.sample12));
