@@ -75,7 +75,7 @@ public class Solution {
 
 
         // make sure Jug 2 always the Bigger limit.
-        if(jug1 < jug2){
+        if(jug1 > jug2){
             int temp = jug1;
             jug1 = jug2;
             jug2 = temp;

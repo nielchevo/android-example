@@ -6,17 +6,21 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+
+import com.tokopedia.testproject.R;
 
 
-public class WaterJugView extends View {
+public class WaterJugView extends LinearLayout{
 
+    private Context context = null;
     private int maxWater = 0;
     private int waterFill = 0;
 
     public WaterJugView(Context context) {
         super(context);
+        this.context = context;
     }
 
     public WaterJugView(Context context, @Nullable AttributeSet attrs) {
@@ -25,6 +29,7 @@ public class WaterJugView extends View {
 
     public WaterJugView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.context = context;
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -95,34 +100,38 @@ public class WaterJugView extends View {
     */
 
     //draw WaterJug view
-    public void drawCurrentStatus() {
+    public void drawCurrentStatus(int imageId) {
         // get this jug view; TODO: CHANGE TO PICTURE
-        /*
-        hardcoded by color code
-        FULL -> BLACK;
-        HALF FULL -> BLUE
-        HALF EMPTY -> RED;
-        EMPTY -> WHITE
-        */
+
+        // Create a imageView contaner
+
+        ImageView imageHolder = findViewById(imageId);
+
+        //imageHolder.setLayoutParams(new LinearLayout.LayoutParams(this.getLayoutParams().width, this.getLayoutParams().height));
+        imageHolder.setVisibility(getRootView().VISIBLE);
 
         int jugContent = maxWater - waterFill;
 
         if(jugContent == 0) {
             // is empty
 
-            this.setBackgroundColor(Color.parseColor("#000000"));
+            //this.setBackgroundColor(Color.parseColor("#000000"));
+            imageHolder.setImageResource(R.drawable.empty);
         }
         else if(jugContent == maxWater) {
             // is full
-            this.setBackgroundColor(Color.parseColor("#ffffff")); //black
+//            this.setBackgroundColor(Color.parseColor("#ffffff")); //black
+            imageHolder.setImageResource(R.drawable.full);
         }
         else {
             // half
             if(jugContent >= (maxWater/2)) {
                 //half FULL!
-                this.setBackgroundColor(Color.parseColor("#0000ff")); // blue
+//                this.setBackgroundColor(Color.parseColor("#0000ff")); // blue
+                imageHolder.setImageResource(R.drawable.half_full);
             } else {
-                this.setBackgroundColor(Color.parseColor("#ff0000")); // red
+//                this.setBackgroundColor(Color.parseColor("#ff0000")); // red
+                imageHolder.setImageResource(R.drawable.half_empty);
             }
         }
     }
