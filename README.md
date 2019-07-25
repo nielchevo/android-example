@@ -1,2 +1,2 @@
 # android-example
-mini project for android development
+Mini project test for Mobile Android Development
