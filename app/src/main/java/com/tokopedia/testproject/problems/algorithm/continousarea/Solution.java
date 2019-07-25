@@ -1,5 +1,7 @@
 package com.tokopedia.testproject.problems.algorithm.continousarea;
 
+import java.util.HashMap;
+
 /**
  * Created by hendry on 18/01/19.
  */
@@ -10,47 +12,54 @@ public class Solution {
         return 0;
     }*/
 
-    private static boolean[][] visited;
+    private static boolean[][] isVisited;
     private static int m_row, m_col;
-    private static int m_maxArea, m_currentArea;
+    private static int maxArea, m_currentArea;
+    private static int currentRegion = 0;
 
-    private static boolean CheckValue(int[][] mArr, int mRow, int mCol, boolean[][] visited, int flag)
+    private static HashMap<Integer, Integer> mListMaxRegion = new HashMap<Integer, Integer>();
+
+    private static boolean CheckValue(int curPos, int[][] mArr, int mRow, int mCol, boolean[][] isVisited)
     {
         try
         {
-            if((mRow >= 0) && (mRow < m_row) && (mCol >= 0) && (mCol < m_col)   //check boundary
-                    && !visited[mRow][mCol]                     // check is visited
-                    && mArr[mRow][mCol] == flag)                // check if value is same
+            if(!isVisited[mRow][mCol]) // check if next arr are already visited
             {
-                return true;
+                if(mArr[mRow][mCol] == curPos) // check if next array is same value as current position
+                {
+                    return true;
+                }
             }
-
-            System.out.printf("Check FAILED! row: %s col: %s visited: %s | arr: %d != flag: %d \n",
-                    mRow, mCol, visited[mRow][mCol], mArr[mRow][mCol], flag );
 
             return false;
         }
-        catch(Exception ex)
+        catch(ArrayIndexOutOfBoundsException ex)
         {
-            System.out.println(ex.getMessage());
+            System.out.println("[CheckValue() Func] Out of Bound! at: iRow: "+ mRow +" jCol: "+ mCol);
             return false;
         }
     }
 
-    private static void DeepFirstSearch(int[][] mArr, int mRow, int mCol, boolean[][] visited, int find)
+    private static void DeepFirstSearch(int curArr, int[][] mArr, int mRow, int mCol, boolean[][] visited)
     {
-        if(CheckValue(mArr, mRow, mCol, visited, find))
+        try
         {
-            visited[mRow][mCol] = true;
+            if(CheckValue(curArr, mArr, mRow, mCol, visited))
+            {
+                // markVisit this array
+                visited[mRow][mCol] = true;
+                m_currentArea++;
 
-            System.out.println("check ok");
-            m_currentArea++;
-
-            DeepFirstSearch(mArr, mRow, mCol-1, visited, find); // north
-            DeepFirstSearch(mArr, mRow+1, mCol, visited, find); // east
-            DeepFirstSearch(mArr, mRow, mCol+1, visited, find); // south
-            DeepFirstSearch(mArr, mRow-1, mCol, visited, find); // west
-
+                // Check neighboor array
+                DeepFirstSearch(curArr, mArr, mRow, mCol-1, visited); // north
+                DeepFirstSearch(curArr, mArr, mRow+1, mCol, visited); // east
+                DeepFirstSearch(curArr, mArr, mRow, mCol+1, visited); // south
+                DeepFirstSearch(curArr, mArr, mRow-1, mCol, visited); // west
+            }
+        }
+        catch(ArrayIndexOutOfBoundsException ex)
+        {
+            System.out.println("[DFS() Func] Out of Bound Exception!");
         }
     }
 
@@ -59,23 +68,52 @@ public class Solution {
         m_row = mArr[0].length;
         m_col = mArr.length;
 
-        // To track visited cell.
-        visited = new boolean[m_row][m_col];
+        // To track visited array.
+        isVisited = new boolean[m_row][m_col];
 
         for(int i=0; i < m_row; i++)
         {
             for (int j=0; j< m_col; j++)
             {
-                if(visited[i][j] == false)
+                if(!isVisited[i][j])
                 {
-                    m_currentArea = 0;
-                    DeepFirstSearch(mArr, i, j, visited, mArr[i][j]);
+                    // Mark new region
+                    currentRegion += 1;
 
-                    m_maxArea = Math.max(m_maxArea, m_currentArea);
+                    // Reset current area
+                    m_currentArea = 0;
+
+                    try
+                    {
+                        DeepFirstSearch(mArr[i][j], mArr, i, j, isVisited);
+                    }
+                    catch(ArrayIndexOutOfBoundsException ex)
+                    {
+                        /**catch array out of bound due to col and row is not match */
+                        System.out.println("[CheckLargerstRegion() func] Out of Bound in row "+ i +" col: "+ j);
+                    }
+
+                    System.out.println("--- END of DFS search with result: currentRegion= "+ currentRegion +" currentArea= "+ m_currentArea + " ---");
+
+                    // Save and track result inside stack
+                    //mListMaxRegion.put(currentRegion, m_currentArea); *lambda issue
+
+                    // Track the highest region
+                    if(m_currentArea > maxArea)
+                    {
+                        maxArea = m_currentArea;
+                    }
                 }
             }
         }
 
-        return m_maxArea;
+        // Traverse throught stack to get highest region.
+//        mListMaxRegion.entrySet().forEach(entry -> {  // *lambda issue
+//            if(entry.getValue() > maxArea) {
+//                maxArea = entry.getValue();
+//            }
+//        });
+
+        return maxArea;
     }
 }
